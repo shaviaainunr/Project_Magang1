@@ -1,0 +1,88 @@
+.bg-gradient-primary {
+  background-color: #d71920;
+  background-image: linear-gradient(180deg, #d71920 5%, #d71920 10%);
+  background-size: cover;
+}
+
+table.dataTable thead th {
+    position: relative;
+    background-color: #d71920;  /* merah SCG */
+    color: white;
+    cursor: pointer;
+}
+
+table.dataTable thead th.sorting:after,
+table.dataTable thead th.sorting_asc:after,
+table.dataTable thead th.sorting_desc:after {
+    position: absolute;
+    right: 8px;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+
+table.dataTable thead th.sorting:after {
+    content: "\f0dc"; /* icon sort (fa-sort) */
+}
+table.dataTable thead th.sorting_asc:after {
+    content: "\f0de"; /* icon sort-up */
+}
+table.dataTable thead th.sorting_desc:after {
+    content: "\f0dd"; /* icon sort-down */
+}
+.btn-outline-red {
+    background-color: #fff;
+    color: #d71920;
+    border: 1px solid #d71920;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-red:hover {
+    background-color: #d71920;
+    color: #fff;
+}
+/* Pagination merah SCG */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    color: #d71920 !important;
+    border: 1px solid #d71920 !important;
+    background: #d71920 !important;
+    border-radius: 4px;
+    margin: 0 2px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: #d71920 !important;
+    color: #d71920 !important;
+    border: 1px solid #d71920 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #d71920 !important;
+    color: #d71920 !important;
+    border: 1px solid #d71920 !important;
+}
+
+/* Tombol merah SCG */
+.btn-primary {
+    background-color: #d71920 !important;  /* merah SCG */
+    border-color: #d71920 !important;
+    color: #fff !important;
+}
+
+.btn-primary:hover {
+    background-color: #b31217 !important;  /* merah lebih gelap saat hover */
+    border-color: #b31217 !important;
+    color: #fff !important;
+}
+
+/* Atur gambar di tabel agar center */
+.table td img {
+    width: 80px;         /* ukuran gambar */
+    height: auto;        /* proporsional */
+    display: block;      /* biar bisa margin auto */
+    margin: 0 auto;      /* center horizontal */
+    border-radius: 6px;  
+    object-fit: cover;  
+}
+
+
+
