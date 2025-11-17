@@ -55,11 +55,14 @@
 	  
 	  <!-- Bagian Pembuka Menu Template -->
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
-        <a class="nav-link" href="{{ ('../') }}">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span></a>
-      </li>
+     <li class="nav-item active">
+        @auth
+            <a class="nav-link" href="{{ auth()->user()->role === 'admin' ? route('admin.beranda') : route('user.beranda') }}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        @endauth
+      </li> 
 
       <!-- Divider -->
       <hr class="sidebar-divider">
@@ -69,15 +72,6 @@
         Master Data
       </div>
 
-      <!-- Nav Item - Pembelian -->
-<li class="nav-item">
-    <a class="nav-link" href="{{ route('pembelian.index') }}">
-        <i class="fas fa-fw fa-shopping-cart"></i>
-        <span>Pembelian</span>
-    </a>
-</li>
-
-
       <!-- Nav Item - Barang -->
 <li class="nav-item">
     <a class="nav-link" href="{{ route('barang.index') }}">
@@ -86,47 +80,24 @@
     </a>
 </li>
 
+      <!-- Nav Item - Pembelian -->
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('pembelian.index') }}">
+        <i class="fas fa-fw fa-shopping-cart"></i>
+        <span>Pembelian</span>
+    </a>
+</li>
 
       <!-- Divider -->
       <hr class="sidebar-divider">
 
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Menu 2
-      </div>
-
       <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Menu Dropdown 3</span>
-        </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Isi Menu 3.1:</h6>
-            <a class="collapse-item" href="login.html">Menu 3.1</a>
-            <a class="collapse-item" href="register.html">Menu 3.2</a>
-            <div class="collapse-divider"></div>
-            <h6 class="collapse-header">Isi Menu 3.1:</h6>
-            <a class="collapse-item" href="404.html">Menu 3.3</a>
-            <a class="collapse-item" href="blank.html">Menu 3.4</a>
-          </div>
-        </div>
-      </li>
-
-      <!-- Nav Item - Charts -->
-      <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Menu 4</span></a>
-      </li>
-
-      <!-- Nav Item - Tables -->
-      <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Menu 5</span></a>
-      </li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('pengiriman.index') }}">
+        <i class="fas fa-truck"></i>
+        <span>Pengiriman</span>
+    </a>
+</li>
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
@@ -163,17 +134,19 @@
           </button>
 
           <!-- Topbar Search -->
-          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-            <div class="input-group">
-              <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-              <div class="input-group-append">
-                <button class="btn" type="button" style="background-color:#d71920; border-color:#ff0000;">
-  <i class="fas fa-search fa-sm"></i>
-</button>
+          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" onsubmit="return false;">
+    <div class="input-group">
+      <input type="text" id="searchInput" class="form-control bg-light border-0 small"
+       placeholder="Search..." aria-label="Search"
+       onkeyup="searchContent()">
+      <div class="input-group-append">
+        <button class="btn" type="button" style="background-color:#d71920; border-color:#ff0000;">
+          <i class="fas fa-search fa-sm"></i>
+        </button>
+      </div>
+    </div>
+</form>
 
-              </div>
-            </div>
-          </form>
 
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
@@ -182,20 +155,46 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Welcome Administrator, Administrator</span>
-                <img class="img-profile rounded-circle" src="img/SCG1.png">
-              </a>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+    Welcome, {{ Auth::user()->name ?? 'Guest' }}
+</span>
+
+              <img class="img-profile rounded-circle" src="{{ asset('img/SCG1.png') }}" alt="Profile">
+
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="profile.html">
-                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Profile
-                </a>
+                <!-- Dropdown - User Information -->
+<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+    <a class="dropdown-item"
+       href="{{ Auth::user()->role == 'admin' ? route('admin.profile') : route('user.profile') }}">
+        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+        Profile
+    </a>
+
+    <div class="dropdown-divider"></div>
+
+    <a class="dropdown-item" href="#"
+       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+        Logout
+    </a>
+
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        @csrf
+    </form>
+</div>
+
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Logout
-                </a>
+                <a class="dropdown-item" href="#"
+   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+   Logout
+</a>
+
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    @csrf
+</form>
+
               </div>
             </li>
           </ul>
@@ -259,7 +258,7 @@
         <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="/logout">Logout</a>
+        <a class="btn btn-primary" href="{{ route('logout') }}">Logout</a>
         </div>
       </div>
     </div>
@@ -298,6 +297,30 @@
   <!-- Page level custom scripts -->
   <script src="{{asset('js/demo/chart-area-demo.js')}}"></script>
   <script src="{{asset('js/demo/chart-pie-demo.js')}}"></script>
+
+<script>
+function searchContent() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let sections = document.querySelectorAll('.search-section');
+    let found = false;
+
+    sections.forEach(section => {
+        let text = section.innerText.toLowerCase();
+        if (text.includes(input) && input !== "") {
+            section.scrollIntoView({ behavior: 'smooth' });
+            section.style.background = "yellow"; // Highlight sederhana
+            setTimeout(() => {
+                section.style.background = ""; // Hilangkan highlight
+            }, 2000);
+            found = true;
+        }
+    });
+
+    if (!found && input !== "") {
+        console.log("Tidak ditemukan dalam area khusus");
+    }
+}
+</script>
 
 </body>
 

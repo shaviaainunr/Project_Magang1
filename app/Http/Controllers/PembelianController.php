@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Pembelian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class PembelianController extends Controller
 {
@@ -27,7 +29,8 @@ class PembelianController extends Controller
      */
     public function create()
     {
-        return view('pembelian.create');
+        $barangs = \App\Models\Barang::all(); // Pastikan model Barang sudah ada
+    return view('pembelian.create', compact('barangs'));
     }
 
     /**
@@ -45,7 +48,11 @@ class PembelianController extends Controller
         'grade'     => 'required',
         'harga'     => 'required|numeric',
         'tgl_antar' => 'required|date',
+        'keterangan' => 'required',
     ]);
+
+    // Hitung total harga
+    $total = $request->harga * $request->quantity;
 
     Pembelian::create([
         'nm_cust'   => $request->nm_cust,
@@ -53,8 +60,10 @@ class PembelianController extends Controller
         'quantity'  => $request->quantity,
         'grade'     => $request->grade,
         'harga'     => $request->harga,
+        'total_harga' => $total,
         'tgl_antar' => $request->tgl_antar,
-        'status'    => 'Pending', // ✅ default status
+        'keterangan' => $request->keterangan,
+        'status'    => 'Pending',
     ]);
 
     return redirect()->route('pembelian.index')
@@ -91,28 +100,34 @@ class PembelianController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Pembelian $pembelian)
-    {
-        $request->validate([
-            'nm_cust'   => 'required',
-            'alamat'    => 'required',
-            'quantity'  => 'required|numeric',
-            'grade'     => 'required',
-            'harga'     => 'required|numeric',
-            'tgl_antar' => 'required|date',
-        ]);
+{
+    $request->validate([
+        'nm_cust'   => 'required',
+        'alamat'    => 'required',
+        'quantity'  => 'required|numeric',
+        'grade'     => 'required',
+        'harga'     => 'required|numeric',
+        'tgl_antar' => 'required|date',
+        'keterangan' => 'required',
+    ]);
 
-        $pembelian->update([
-            'nm_cust'   => $request->nm_cust,
-            'alamat'    => $request->alamat,
-            'quantity'  => $request->quantity,
-            'grade'     => $request->grade,
-            'harga'     => $request->harga,
-            'tgl_antar' => $request->tgl_antar,
-        ]);
+    // Hitung total harga kembali
+    $total = $request->harga * $request->quantity;
 
-        return redirect()->route('pembelian.index')
-                         ->with('success', 'Pemesanan Berhasil Disimpan');
-    }
+    $pembelian->update([
+        'nm_cust'   => $request->nm_cust,
+        'alamat'    => $request->alamat,
+        'quantity'  => $request->quantity,
+        'grade'     => $request->grade,
+        'harga'     => $request->harga,
+        'total_harga' => $total,
+        'tgl_antar' => $request->tgl_antar,
+        'keterangan' => $request->keterangan,
+    ]);
+
+    return redirect()->route('pembelian.index')
+                     ->with('success', 'Pemesanan Berhasil Disimpan');
+}
 
     /**
      * Remove the specified resource from storage.
@@ -149,6 +164,13 @@ public function batal(Pembelian $pembelian)
 
     return redirect()->route('pembelian.index')->with('error', 'Waktu pembayaran habis, pesanan dibatalkan!');
 }
+public function cetak($id)
+{
+    $pembelian = Pembelian::findOrFail($id);
+    $pdf = Pdf::loadView('pembelian.cetak_pdf', compact('pembelian'));
+    return $pdf->stream('Bukti_Pembelian_'.$pembelian->nm_cust.'.pdf');
+}
+
 }
 
 

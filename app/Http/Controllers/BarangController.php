@@ -10,14 +10,16 @@ class BarangController extends Controller
 {
     public function index()
     {
-        $barangs = Barang::latest()->paginate(20);
-        return view('barang.index', compact('barangs'))
-               ->with('i', (request()->input('page', 1) - 1) * 20); // ✅ fix
+        // Urutkan berdasarkan harga dari paling murah ke paling mahal
+    $barangs = Barang::orderBy('harga', 'asc')->get();
+    
+    return view('user.barang.index', compact('barangs'))
+           ->with('i', (request()->input('page', 1) - 1));
     }
 
     public function create()
     {
-        return view('barang.create');
+        return view('user.barang.create');
     }
 
     public function store(Request $request)
@@ -41,7 +43,7 @@ class BarangController extends Controller
             'gambar' => $nama_file,
         ]);
 
-        return redirect()->route('barang.index')->with('success', 'Material Berhasil Ditambahkan');
+        return redirect()->route('user.barang.index')->with('success', 'Material Berhasil Ditambahkan');
     }
 
     public function show($id)
@@ -51,7 +53,7 @@ class BarangController extends Controller
 
     public function edit(Barang $barang)
     {
-        return view('barang.edit', compact('barang'));
+        return view('user.barang.edit', compact('barang'));
     }
 
     public function update(Request $request, Barang $barang) // ✅ pakai langsung $barang
@@ -79,7 +81,7 @@ class BarangController extends Controller
             'gambar' => $barang->gambar,
         ]);
 
-        return redirect()->route('barang.index')->with('success', 'Material Berhasil Disimpan');
+        return redirect()->route('user.barang.index')->with('success', 'Material Berhasil Disimpan');
     }
 
     public function destroy(Barang $barang)
@@ -87,6 +89,6 @@ class BarangController extends Controller
         File::delete('Foto_Material/' . $barang->gambar);
         $barang->delete();
 
-        return redirect()->route('barang.index')->with('success', 'Data Material Berhasil Dihapus');
+        return redirect()->route('user.barang.index')->with('success', 'Data Material Berhasil Dihapus');
     }
 }

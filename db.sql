@@ -1,0 +1,11 @@
+CREATE DATABASE IF NOT EXISTS multi_login;
+USE multi_login;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name text NOT NULL,
+  username VARCHAR(100) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  role ENUM('name','email','password') NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

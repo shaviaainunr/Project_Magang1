@@ -1,8 +1,12 @@
 @extends('layout')
 @section('content')
 <div class="card shadow mb-4">
-    <div class="card-header py-3">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
         <h6 class="m-0 font-weight-bold" style="color:#d71920;">Pemesanan SCG Plan Cirebon</h6>
+        <!-- ✅ Tombol Kembali ke Dashboard -->
+        <a href="{{ url('admin/dashboard') }}" class="btn btn-secondary btn-sm">
+            <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
+        </a>
     </div>
 
     <div class="card-body">
@@ -14,7 +18,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Tanggal Pesan</th> {{-- ✅ tambahan --}}
+                        <th>Tanggal Pesan</th>
                         <th>Nama</th>
                         <th>Alamat</th>
                         <th>Quantity</th>
@@ -27,7 +31,7 @@
                 <tfoot>
                     <tr>
                         <th>No</th>
-                        <th>Tanggal Pesan</th> {{-- ✅ tambahan --}}
+                        <th>Tanggal Pesan</th>
                         <th>Nama</th>
                         <th>Alamat</th>
                         <th>Quantity</th>
@@ -41,7 +45,7 @@
                     @foreach($pembelians as $pembelian)
                         <tr>
                             <td>{{ ++$i }}</td>
-                            <td>{{ $pembelian->created_at->format('d-m-Y H:i') }}</td> {{-- ✅ tampilkan --}}
+                            <td>{{ $pembelian->created_at->format('d-m-Y H:i') }}</td>
                             <td>{{ $pembelian->nm_cust }}</td>
                             <td>{{ $pembelian->alamat }}</td>
                             <td>{{ $pembelian->quantity }}</td>

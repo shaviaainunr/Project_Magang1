@@ -11,6 +11,7 @@ class Pembelian extends Model
 
     public $table = "tbl_pembelian";
     protected $fillable = [
-        'nm_cust', 'alamat', 'quantity', 'grade', 'harga', 'tgl_antar'
+        'nm_cust', 'alamat', 'quantity', 'grade', 'harga', 'total_harga', 'tgl_antar', 'keterangan'
     ];
+    
 }

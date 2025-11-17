@@ -83,6 +83,230 @@ table.dataTable thead th.sorting_desc:after {
     border-radius: 6px;  
     object-fit: cover;  
 }
+/* Warna dasar baris tabel */
+.table-red tbody tr {
+    background-color: #fff; /* Putih agar bersih dan kontras */
+}
+
+/* Efek hover ketika cursor diarahkan ke baris */
+.table-red tbody tr:hover {
+    background-color: #d71920; /* Merah tua terlihat saat hover */
+    color: white; /* Teks ikut jadi putih saat hover */
+}
+
+/* Warna bold untuk header tabel */
+.table-red thead tr, 
+.table-red tfoot tr {
+    background-color: #d71920 !important; /* Merah tua sesuai tema */
+    color: white !important;
+}
+/* card-menu style */
+.card-menu {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+    border-radius: 10px;
+    text-decoration: none;
+    overflow: hidden;
+}
+
+/* pastikan selector spesifik agar tidak mudah ditimpa Bootstrap */
+.card-menu img,
+.card-menu .movie-image {
+    display: block !important;
+    margin: 0 auto 15px auto !important; /* tengah secara horizontal */
+    width: 80px !important;
+    height: auto !important;
+    object-fit: contain !important;
+}
+
+.card-menu .card-body,
+.card-menu .collapse-item {
+    color: inherit;
+    text-decoration: none;
+}
+
+.card-menu:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+/* responsive: ubah lebar movie-item pada layar kecil */
+.movie-item {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 1%;
+}
+@media (max-width: 991px) {
+    .movie-item { width: 48% !important; margin-bottom: 1rem; }
+}
+@media (max-width: 575px) {
+    .movie-item { width: 100% !important; }
+}
+.section-title-full {
+    font-weight: bold;
+    color: #d71920; /* Sesuai text-primary */
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.header-line {
+    border: none;
+    border-top: 2px solid #d71920; /* Warna garis */
+    width: 100%;
+    margin: 0 auto 20px auto;
+}
+/* Judul Section */
+.section-title-full {
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    color: #d71920;
+}
+
+/* Garis Merah SCG */
+.header-line {
+    width: 100%;
+    height: 3px;
+    background-color: #d71920;
+    margin: 0 auto 15px auto;
+    border: none;
+}
+
+/* TABEL MUTU BETON */
+.table-mutu {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    font-size: 0.95rem;
+    border: 2px solid #d71920; /* Border luar merah */
+}
+
+.table-mutu th {
+    background: #d71920;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 12px;
+    text-transform: uppercase;
+    border: 1px solid #b9151a;
+}
+
+.table-mutu td {
+    padding: 10px;
+    border: 1px solid #d71920;
+    color: #333333;
+    text-align: center;
+}
+
+/* Efek Hover */
+.table-mutu tbody tr:hover {
+    background-color: #ffeaea;
+    transition: 0.3s;
+}
+/* TABEL MUTU BETON – SCG STYLE */
+.table-mutu {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    margin-top: 20px;
+}
+
+/* Header Merah SCG */
+.table-mutu th {
+    padding: 12px;
+    border: 1px solid #b9151a;
+    background-color: #d71920; /* Merah SCG */
+    color: #ffffff;
+    text-align: center; /* Tengah */
+    font-weight: bold;
+}
+
+/* Isi Tabel Putih */
+.table-mutu td {
+    padding: 12px;
+    border: 1px solid #b9151a;
+    background-color: #ffffff; /* PUTIH */
+    color: #000000;
+    text-align: left; /* Kiri */
+}
+
+/* Hover Efek (opsional, baris isi saja) */
+.table-mutu tbody tr:hover td {
+    background-color: #f5f5f5;
+    transition: 0.3s;
+}
+/* ===== Background Merah + Gambar (Auto Fit / Cover) ===== */
+body, #wrapper {
+    background: #d71920 url('/img/SCG CAR.png') center center no-repeat !important;
+    background-size: cover !important;   /* Cover = penuh layar tanpa pecah */
+    background-attachment: fixed !important; /* Efek stabil saat scroll */
+}
+
+/* Lapisan gelap agar teks tetap jelas */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: -1;
+}
+
+/* Konten putih agar tetap fokus */
+#content-wrapper {
+    background: #ffffff;
+    border-radius: 12px;
+    margin: 20px;
+    padding-bottom: 20px;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+.bg-gradient-primary {
+    background: linear-gradient(
+        to bottom,
+        rgba(215, 25, 32, 0.9),   /* Warna atas, transparan 90% */
+        rgba(200, 0, 0, 0.85)     /* Warna bawah, transparan 85% */
+    ) !important;
+    backdrop-filter: blur(2px);   /* Opsional: efek blur halus pada gambar di belakang */
+}
+/* MAP CONTACT STYLE */
+.contact-map {
+    max-width: 700px;
+    margin: 20px auto;
+    background-color: #d71920;
+    padding: 15px;
+    border-radius: 8px;
+}
+.contact-map h6 {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+/* CONTACT US FULL BACKGROUND */
+.contact-full {
+    background-color: #d71920;  /* Merah SCG */
+    color: #ffffff;
+    padding: 40px 20px;
+    margin-top: 20px;
+}
+
+.contact-full h5,
+.contact-full p {
+    color: #ffffff !important;
+}
+
+.contact-full a.btn {
+    background-color: #ffffff !important;
+    color: #d71920 !important;
+    border: none;
+}
+.card-menu .small-text {
+    font-size: 0.85rem; /* lebih kecil dari h5 */
+    margin-top: 5px;    /* opsional: merapatkan ke judul */
+    display: block;
+}
+
 
 
 
