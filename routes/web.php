@@ -32,7 +32,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/beranda', function () {
         return view('admin.beranda');
     })->name('admin.beranda');
-
 });
 
 // ===============================
@@ -43,7 +42,6 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/user/beranda', function () {
         return view('user.beranda');
     })->name('user.beranda');
-
 });
 
 // ===============================
@@ -56,11 +54,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 // Tambahan untuk fitur pembayaran
-Route::get('pembelian/{pembelian}/payment', [PembelianController::class, 'payment'])->name('pembelian.payment');
+Route::get('/pembelian/{id}/payment', [PembelianController::class, 'paymentPage'])
+    ->name('pembelian.payment');
+Route::post('/pembelian/{id}/konfirmasi', [PembelianController::class, 'konfirmasi'])
+    ->name('pembelian.konfirmasi');
 Route::post('pembelian/{pembelian}/konfirmasi', [PembelianController::class, 'konfirmasi'])->name('pembelian.konfirmasi');
 Route::post('pembelian/{pembelian}/batal', [PembelianController::class, 'batal'])->name('pembelian.batal');
 Route::get('/pembelian/{id}/cetak', [PembelianController::class, 'cetak'])->name('pembelian.cetak');
 
+Route::post('/admin/pembelian/{id}/approve', [PembelianController::class, 'approve'])
+    ->name('admin.pembelian.approve');
+
+Route::post('/admin/pembelian/{id}/reject', [PembelianController::class, 'reject'])
+    ->name('admin.pembelian.reject');
 // ===============================
 // 🔹 FITUR BARANG & PENGIRIMAN
 // ===============================
@@ -72,6 +78,5 @@ Route::get('/pengiriman/status/{id}', [PengirimanController::class, 'status'])->
 // 🔹 DASHBOARD
 // ===============================
 Route::get('/dashboard', [DashboardController::class, 'index'])
-     ->name('dashboard')
-     ->middleware('auth');
-
+    ->name('dashboard')
+    ->middleware('auth');

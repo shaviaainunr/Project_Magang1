@@ -19,7 +19,7 @@ class PembelianController extends Controller
     {
         $pembelians = Pembelian::latest()->paginate(20);
         return view('pembelian.index', compact('pembelians'))
-               ->with('i', (request()->input('page', 1) - 1) * 20);
+            ->with('i', (request()->input('page', 1) - 1) * 20);
     }
 
     /**
@@ -30,7 +30,7 @@ class PembelianController extends Controller
     public function create()
     {
         $barangs = \App\Models\Barang::all(); // Pastikan model Barang sudah ada
-    return view('pembelian.create', compact('barangs'));
+        return view('pembelian.create', compact('barangs'));
     }
 
     /**
@@ -40,35 +40,32 @@ class PembelianController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-{
-    $request->validate([
-        'nm_cust'   => 'required',
-        'alamat'    => 'required',
-        'quantity'  => 'required|numeric',
-        'grade'     => 'required',
-        'harga'     => 'required|numeric',
-        'tgl_antar' => 'required|date',
-        'keterangan' => 'required',
-    ]);
+    {
+        $request->validate([
+            'nm_cust'   => 'required',
+            'alamat'    => 'required',
+            'quantity'  => 'required|numeric',
+            'grade'     => 'required',
+            'harga'     => 'required|numeric',
+            'tgl_antar' => 'required|date',
+        ]);
 
-    // Hitung total harga
-    $total = $request->harga * $request->quantity;
+        // Hitung total harga
+        $total = $request->harga * $request->quantity;
 
-    Pembelian::create([
-        'nm_cust'   => $request->nm_cust,
-        'alamat'    => $request->alamat,
-        'quantity'  => $request->quantity,
-        'grade'     => $request->grade,
-        'harga'     => $request->harga,
-        'total_harga' => $total,
-        'tgl_antar' => $request->tgl_antar,
-        'keterangan' => $request->keterangan,
-        'status'    => 'Pending',
-    ]);
+        Pembelian::create([
+            'nm_cust'   => $request->nm_cust,
+            'alamat'    => $request->alamat,
+            'quantity'  => $request->quantity,
+            'grade'     => $request->grade,
+            'harga'     => $request->harga,
+            'tgl_antar' => $request->tgl_antar,
+            'status'    => 'Pending',
+        ]);
 
-    return redirect()->route('pembelian.index')
-                     ->with('success', 'Pemesanan Berhasil');
-}
+        return redirect()->route('pembelian.index')
+            ->with('success', 'Pemesanan Berhasil');
+    }
 
     /**
      * Display the specified resource.
@@ -100,34 +97,34 @@ class PembelianController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Pembelian $pembelian)
-{
-    $request->validate([
-        'nm_cust'   => 'required',
-        'alamat'    => 'required',
-        'quantity'  => 'required|numeric',
-        'grade'     => 'required',
-        'harga'     => 'required|numeric',
-        'tgl_antar' => 'required|date',
-        'keterangan' => 'required',
-    ]);
+    {
+        $request->validate([
+            'nm_cust'   => 'required',
+            'alamat'    => 'required',
+            'quantity'  => 'required|numeric',
+            'grade'     => 'required',
+            'harga'     => 'required|numeric',
+            'tgl_antar' => 'required|date',
+            'keterangan' => 'required',
+        ]);
 
-    // Hitung total harga kembali
-    $total = $request->harga * $request->quantity;
+        // Hitung total harga kembali
+        $total = $request->harga * $request->quantity;
 
-    $pembelian->update([
-        'nm_cust'   => $request->nm_cust,
-        'alamat'    => $request->alamat,
-        'quantity'  => $request->quantity,
-        'grade'     => $request->grade,
-        'harga'     => $request->harga,
-        'total_harga' => $total,
-        'tgl_antar' => $request->tgl_antar,
-        'keterangan' => $request->keterangan,
-    ]);
+        $pembelian->update([
+            'nm_cust'   => $request->nm_cust,
+            'alamat'    => $request->alamat,
+            'quantity'  => $request->quantity,
+            'grade'     => $request->grade,
+            'harga'     => $request->harga,
+            'total_harga' => $total,
+            'tgl_antar' => $request->tgl_antar,
+            'keterangan' => $request->keterangan,
+        ]);
 
-    return redirect()->route('pembelian.index')
-                     ->with('success', 'Pemesanan Berhasil Disimpan');
-}
+        return redirect()->route('pembelian.index')
+            ->with('success', 'Pemesanan Berhasil Disimpan');
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -140,38 +137,71 @@ class PembelianController extends Controller
         $pembelian->delete();
 
         return redirect()->route('pembelian.index')
-                         ->with('success', 'Pemesanan Berhasil Dihapus');
+            ->with('success', 'Pemesanan Berhasil Dihapus');
     }
 
 
-public function payment(Pembelian $pembelian)
-{
-    return view('pembelian.payment', compact('pembelian'));
+    public function paymentPage($id)
+    {
+        $pembelian = Pembelian::findOrFail($id);
+        return view('pembelian.payment', compact('pembelian'));
+    }
+
+
+
+    public function konfirmasi(Request $request, $id)
+    {
+        $pembelian = Pembelian::findOrFail($id);
+
+        // validasi upload
+        $request->validate([
+            'bukti_pembayaran' => 'required|mimes:jpg,jpeg,png,pdf|max:5000',
+        ]);
+
+        // simpan bukti pembayaran
+        if ($request->hasFile('bukti_pembayaran')) {
+            $fileName = time() . '_' . $request->file('bukti_pembayaran')->getClientOriginalName();
+            $request->file('bukti_pembayaran')->move(public_path('uploads/bukti'), $fileName);
+            $pembelian->bukti_pembayaran = $fileName;
+        }
+
+        // UBAH STATUS DI SINI
+        $pembelian->status = 'Processing';
+        $pembelian->save();
+
+        return redirect()->route('pembelian.index')->with('success', 'Pembayaran sedang diproses');
+    }
+
+
+    public function batal(Pembelian $pembelian)
+    {
+        $pembelian->status = 'Cancelled';
+        $pembelian->save();
+
+        return redirect()->route('pembelian.index')->with('error', 'Waktu pembayaran habis, pesanan dibatalkan!');
+    }
+    public function cetak($id)
+    {
+        $pembelian = Pembelian::findOrFail($id);
+        $pdf = Pdf::loadView('pembelian.cetak_pdf', compact('pembelian'));
+        return $pdf->stream('Bukti_Pembelian_' . $pembelian->nm_cust . '.pdf');
+    }
+
+    public function approve($id)
+    {
+        $p = Pembelian::findOrFail($id);
+        $p->status = 'Paid';
+        $p->save();
+
+        return back()->with('success', 'Pembayaran disetujui.');
+    }
+
+    public function reject($id)
+    {
+        $p = Pembelian::findOrFail($id);
+        $p->status = 'Invalid';
+        $p->save();
+
+        return back()->with('error', 'Pembayaran ditolak.');
+    }
 }
-
-public function konfirmasi(Pembelian $pembelian)
-{
-    $pembelian->status = 'Paid';
-    $pembelian->save();
-
-    return redirect()->route('pembelian.index')->with('success', 'Pembayaran berhasil dikonfirmasi!');
-}
-
-public function batal(Pembelian $pembelian)
-{
-    $pembelian->status = 'Cancelled';
-    $pembelian->save();
-
-    return redirect()->route('pembelian.index')->with('error', 'Waktu pembayaran habis, pesanan dibatalkan!');
-}
-public function cetak($id)
-{
-    $pembelian = Pembelian::findOrFail($id);
-    $pdf = Pdf::loadView('pembelian.cetak_pdf', compact('pembelian'));
-    return $pdf->stream('Bukti_Pembelian_'.$pembelian->nm_cust.'.pdf');
-}
-
-}
-
-
-

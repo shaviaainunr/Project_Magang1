@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('tbl_pembelian', function (Blueprint $table) {
-            $table->enum('status', ['Pending', 'Processing', 'Paid', 'Cancelled', 'Invalid'])->default('Pending');
+            $table->string('bukti_pembayaran')->nullable()->after('status');
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('tbl_pembelian', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->dropColumn('bukti_pembayaran');
         });
     }
 };

@@ -11,10 +11,10 @@ class BarangController extends Controller
     public function index()
     {
         // Urutkan berdasarkan harga dari paling murah ke paling mahal
-    $barangs = Barang::orderBy('harga', 'asc')->get();
-    
-    return view('user.barang.index', compact('barangs'))
-           ->with('i', (request()->input('page', 1) - 1));
+        $barangs = Barang::orderBy('harga', 'asc')->get();
+
+        return view('user.barang.index', compact('barangs'))
+            ->with('i', (request()->input('page', 1) - 1));
     }
 
     public function create()
@@ -43,7 +43,7 @@ class BarangController extends Controller
             'gambar' => $nama_file,
         ]);
 
-        return redirect()->route('user.barang.index')->with('success', 'Material Berhasil Ditambahkan');
+        return redirect()->route('barang.index')->with('success', 'Material Berhasil Ditambahkan');
     }
 
     public function show($id)
