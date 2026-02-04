@@ -20,7 +20,7 @@
                             <th>Nama</th>
                             <th>Quantity</th>
                             <th>Grade</th>
-                            <th>Total Harga</th>
+                            <th>Total Harga (Rp)</th>
                             <th>Tanggal Antar</th>
                             <th>Action</th>
                         </tr>
@@ -32,7 +32,7 @@
                             <th>Nama</th>
                             <th>Quantity</th>
                             <th>Grade</th>
-                            <th>Total Harga</th>
+                            <th>Total Harga (Rp)</th>
                             <th>Tanggal Antar</th>
                             <th>Action</th>
                         </tr>
@@ -41,11 +41,11 @@
                         @foreach ($pembelians as $pembelian)
                             <tr>
                                 <td>{{ ++$i }}</td>
-                                <td>{{ $pembelian->created_at->timezone('Asia/Jakarta')->format('d-m-Y H:i') }}
+                                <td>{{ $pembelian->created_at->timezone('Asia/Jakarta')->format('d-m-Y H:i') }}</td>
                                 <td>{{ $pembelian->nm_cust }}</td>
                                 <td>{{ $pembelian->quantity }}</td>
                                 <td>{{ $pembelian->grade }}</td>
-                                <td>{{ $pembelian->total_harga }}</td>
+                                <td>Rp {{ number_format($pembelian->total_harga, 0, ',', '.') }}</td>
                                 <td>{{ $pembelian->tgl_antar }}</td>
                                 <td>
                                     <a href="{{ route('pembelian.show', $pembelian->id) }}"
@@ -71,11 +71,10 @@
                                             <button class="btn btn-success btn-sm">Setujui</button>
                                         </form>
 
-                                        <form action="{{ route('admin.pembelian.reject', $pembelian->id) }}" method="POST"
-                                            style="display:inline-block;">
-                                            @csrf
-                                            <button class="btn btn-danger btn-sm">Tolak</button>
-                                        </form>
+                                        <a href="{{ route('admin.pembelian.alasan', $pembelian->id) }}"
+                                        class="btn btn-danger btn-sm">
+                                            Tolak
+                                        </a>
                                     @endif
                                 </td>
 

@@ -60,6 +60,15 @@
             <input type="text" class="form-control" name="keterangan">
           </div>
 
+          <div class="form-group">
+              <label>Foto Lokasi Proyek (Gambar / PDF)</label>
+              <input type="file" name="foto_lokasi" class="form-control" accept=".jpg,.jpeg,.png,.pdf">
+
+              <small class="text-muted">
+                  Format yang diperbolehkan: JPG, PNG, atau PDF
+              </small>
+          </div>
+
           <div class="text-center mt-4">
             <input type="submit" class="btn btn-primary" value="Buat Pesanan" />
           </div>

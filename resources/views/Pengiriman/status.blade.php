@@ -16,30 +16,74 @@
 
         <hr>
 
-        <!-- Tahapan Status Pengiriman -->
         <div class="timeline">
 
-            <!-- 1. Sedang Diproses -->
+            {{-- 1. PROSES --}}
             <div class="step">
-                <h6>1️⃣ Sedang Diproses di Pabrik</h6>
+                <h6>1️⃣ Sedang Diproses di Plant</h6>
                 <p>Material sedang disiapkan dan dicampur di batching plant.</p>
+
+                @include('pengiriman._bukti', [
+                    'tahap' => 'proses',
+                    'file' => $pembelian->bukti_proses,
+                    'pembelian' => $pembelian
+                ])
             </div>
 
-            <!-- 2. Siap Berangkat -->
+            {{-- 2. BERANGKAT --}}
             <div class="step">
                 <h6>2️⃣ Siap Berangkat</h6>
                 <p>Material sudah dimuat ke truk mixer dan siap dikirim.</p>
+
+                @include('pengiriman._bukti', [
+                    'tahap' => 'berangkat',
+                    'file' => $pembelian->bukti_berangkat,
+                    'pembelian' => $pembelian
+                ])
             </div>
 
-            <!-- 3. Sudah Sampai -->
+            {{-- 3. SAMPAI --}}
             <div class="step">
                 <h6>3️⃣ Sudah Sampai Lokasi</h6>
                 <p>Material sudah tiba di lokasi proyek pelanggan.</p>
-            </div>
 
+                @include('pengiriman._bukti', [
+                    'tahap' => 'sampai',
+                    'file' => $pembelian->bukti_sampai,
+                    'pembelian' => $pembelian
+                ])
+            </div>
         </div>
 
-        <a href="{{ route('pengiriman.index') }}" class="btn btn-secondary mt-3">← Kembali</a>
+      <div class="d-flex justify-content-between mt-3">
+    <a href="{{ route('pengiriman.index') }}" class="btn btn-secondary">
+        ← Kembali
+    </a>
+
+    @auth
+@if(auth()->user()->role === 'admin')
+
+    @if($pembelian->status_pengiriman !== 'selesai')
+        <form action="{{ route('pengiriman.selesai', $pembelian->id) }}"
+              method="POST"
+              onsubmit="return confirm('Yakin pengiriman sudah selesai?')">
+            @csrf
+            @method('PUT')
+
+            <button class="btn btn-success">
+                ✅ Pengiriman Selesai
+            </button>
+        </form>
+    @else
+        <button class="btn btn-primary" disabled>
+            🚚 Pengiriman Selesai
+        </button>
+    @endif
+
+@endif
+@endauth
+
+</div>
     </div>
 </div>
 

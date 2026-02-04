@@ -21,7 +21,7 @@
 
             <!-- 1. Sedang Diproses -->
             <div class="step">
-                <h6>1️⃣ Sedang Diproses di Pabrik</h6>
+                <h6>1️⃣ Sedang Diproses di Plant</h6>
                 <p>Material sedang disiapkan dan dicampur di batching plant.</p>
             </div>
 

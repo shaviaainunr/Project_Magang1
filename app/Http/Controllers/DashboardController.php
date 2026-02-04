@@ -2,24 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Pembelian;
-use App\Models\Barang;
+use App\Models\Pengiriman;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     public function index()
-    {
-        $totalPesanan      = Pembelian::count();
-        $pengirimanSelesai = Pembelian::where('status', 'Selesai')->count();
-        $pengirimanProses  = Pembelian::where('status', 'Proses')->count();
-        $barangs           = Barang::orderBy('created_at', 'desc')->get(); // <-- kirim ini ke view
-
-        return view('user.dashboard', compact(
-            'totalPesanan',
-            'pengirimanSelesai',
-            'pengirimanProses',
-            'barangs'
-        ));
+{
+    // Jika USER → hanya hitung pesanan milik user tersebut
+    if (Auth::user()->role === 'user') {
+        $totalPesanan = Pembelian::where('user_id', Auth::id())->count();
+        $pembelians   = Pembelian::where('user_id', Auth::id())->get();
     }
+    // Jika ADMIN → hitung semua pesanan
+    else {
+        $totalPesanan = Pembelian::count();
+        $pembelians   = Pembelian::all();
+    }
+
+    return view('pembelian.index', compact('pembelians', 'totalPesanan'))
+        ->with('i', 0);
+}
 }

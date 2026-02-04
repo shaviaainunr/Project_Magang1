@@ -40,6 +40,32 @@ table.dataTable thead th.sorting_desc:after {
     background-color: #d71920;
     color: #fff;
 }
+
+/*Icon Mata Password*/
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 42px; /* ruang untuk ikon */
+    border-radius: 10px;
+    padding: 12px;
+    border: 1.5px solid #ccc;
+    font-size: 15px;
+}
+
+.password-wrapper .toggle-eye {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #777;
+    font-size: 18px;
+}
+
 /* Pagination merah SCG */
 .dataTables_wrapper .dataTables_paginate .paginate_button {
     color: #d71920 !important;
@@ -305,8 +331,207 @@ body::before {
     font-size: 0.85rem; /* lebih kecil dari h5 */
     margin-top: 5px;    /* opsional: merapatkan ke judul */
     display: block;
+
+/* CSS Fitur Back
+}
+.btn-scg-back {
+    display: inline-block;
+    background-color: #b80000; /* Merah SCG */
+    color: #fff !important;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s ease;
 }
 
+.btn-scg-back:hover {
+    background-color: transparent;
+    transform: translateY(-2px);
+    text-decoration: none;
+}
 
+/* Style khusus untuk H1 — tema SCG */
+h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #cc0000; /* Merah khas SCG */
+    text-transform: uppercase;
+    letter-spacing: 1px;
 
+    /* efek visual */
+    border-left: 5px solid #cc0000;
+    padding-left: 12px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+
+    /* sedikit animasi */
+    animation: fadeInDown 0.6s ease-out;
+}
+
+/* Animasi lembut */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* ==========================================
+   SCG Login Theme – Updated
+   Input sejajar & tombol besar
+   ========================================== */
+
+/* Card utama */
+.login-card {
+    width: 420px; /* lebih lebar agar input sejajar */
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 2.5rem;
+    border-top: 6px solid #d6001a;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Animasi */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Judul */
+.login-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    color: #b30016;
+}
+
+/* Label */
+.form-label {
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 6px;
+}
+
+/* Input */
+.form-control {
+    width: 100%;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 15px;
+    border: 1.5px solid #ccc;
+    transition: 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #d6001a;
+    box-shadow: 0 0 5px rgba(214, 0, 26, 0.4);
+}
+
+/* Tombol Login */
+.btn-login {
+    background: #d6001a;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 17px;
+    padding: 14px;  /* tombol lebih besar */
+    width: 100%;    /* memenuhi card */
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+    background: #b30016;
+    transform: translateY(-2px);
+}
+
+/* Error text */
+.text-danger {
+    font-size: 0.875rem;
+    color: #d6001a !important;
+}
+
+/* Footer */
+footer {
+    position: fixed;
+    bottom: 15px;
+    text-align: center;
+    width: 100%;
+    color: #555;
+    font-size: 0.9rem;
+}
+/* Logo di atas judul */
+.login-logo {
+    text-align: center;
+    margin-bottom: 1.2rem;
+}
+
+.login-logo img {
+    width: 100px;       /* ukuran besar kecil logo */
+    height: auto;
+    display: inline-block;
+    filter: drop-shadow(0px 2px 5px rgba(0,0,0,0.15));
+}
+.img-profile-500 {
+    width: 500px;
+    height: 500px;
+    object-fit: cover;      /* biar foto tidak gepeng */
+    border-radius: 50%;     /* bulat (hapus kalau mau kotak) */
+    border: 4px solid #ddd; /* opsional */
+}
+.img-profile {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+/* ===== CAPTCHA STYLE ===== */
+.captcha-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#captchaQuestion {
+    min-width: 130px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: #f1f3f5;
+    border: 1px dashed #ced4da;
+    border-radius: 8px;
+    padding: 10px 14px;
+    letter-spacing: 1px;
+    user-select: none;
+}
+
+#captchaAnswer {
+    flex: 1;
+    border-radius: 8px;
+    padding: 10px 12px;
+}
+
+#captchaAnswer:focus {
+    border-color: #4c7cf3;
+    box-shadow: 0 0 0 0.15rem rgba(76, 124, 243, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .captcha-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #captchaQuestion {
+        width: 100%;
+    }
+}
 

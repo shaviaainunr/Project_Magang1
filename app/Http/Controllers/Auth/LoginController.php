@@ -20,7 +20,10 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            // Regenerasi session untuk keamanan
             $request->session()->regenerate();
+            // Set flash session untuk notifikasi selamat datang
+            session()->flash('welcome', 'Selamat datang, ' . auth()->user()->name);
 
             // Arahkan berdasarkan role
             $user = Auth::user();

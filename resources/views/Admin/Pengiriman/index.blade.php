@@ -7,7 +7,7 @@
 
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" width="100%" cellspacing="0">
+<table class="table table-bordered table-red" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -15,10 +15,23 @@
                         <th>Alamat</th>
                         <th>Quantity</th>
                         <th>Grade</th>
-                        <th>Harga</th>
+                        <th>Total Harga</th>
                         <th>Tanggal Antar</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
+                <tfoot>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Alamat</th>
+                        <th>Quantity</th>
+                        <th>Grade</th>
+                        <th>Total Harga</th>
+                        <th>Tanggal Antar</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
                 <tbody>
                     @foreach($pembelians as $pembelian)
                         <tr>
@@ -27,8 +40,19 @@
                             <td>{{ $pembelian->alamat }}</td>
                             <td>{{ $pembelian->quantity }}</td>
                             <td>{{ $pembelian->grade }}</td>
-                            <td>{{ $pembelian->harga }}</td>
+                            <td>{{ $pembelian->total_harga }}</td>
                             <td>{{ $pembelian->tgl_antar }}</td>
+                            <td>
+                            @if($pembelian->status == 'dibatalkan')
+                                <button class="btn btn-secondary btn-sm" disabled>
+                                    Dibatalkan
+                                </button>
+                            @else
+                                <a href="{{ route('pengiriman.status', $pembelian->id) }}" class="btn btn-success btn-sm">
+                                    Lihat Status Pengiriman
+                                </a>
+                            @endif
+                        </td>
                         </tr>
                     @endforeach
                 </tbody>

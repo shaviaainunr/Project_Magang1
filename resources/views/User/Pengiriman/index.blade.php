@@ -40,7 +40,7 @@
                             <td>{{ $pembelian->alamat }}</td>
                             <td>{{ $pembelian->quantity }}</td>
                             <td>{{ $pembelian->grade }}</td>
-                            <td>{{ $pembelian->total_harga }}</td>
+                            <td>Rp {{ number_format($pembelian->total_harga, 0, ',', '.') }}</td>
                             <td>{{ $pembelian->tgl_antar }}</td>
                             <td>
                             @if($pembelian->status == 'dibatalkan')

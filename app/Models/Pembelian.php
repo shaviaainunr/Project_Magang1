@@ -11,7 +11,19 @@ class Pembelian extends Model
 
     public $table = "tbl_pembelian";
     protected $fillable = [
-        'nm_cust', 'alamat', 'quantity', 'grade', 'harga', 'total_harga', 'tgl_antar', 'keterangan'
-    ];
+    'nm_cust',
+    'alamat',
+    'quantity',
+    'grade',
+    'harga',
+    'total_harga', // ✅ WAJIB
+    'tgl_antar',
+    'status',
+    'keterangan',
+    'bukti_pembayaran',
+    'alasan_penolakan',
+    'foto_lokasi'
+];
+
     
 }

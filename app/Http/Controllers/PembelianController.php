@@ -40,32 +40,45 @@ class PembelianController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'nm_cust'   => 'required',
-            'alamat'    => 'required',
-            'quantity'  => 'required|numeric',
-            'grade'     => 'required',
-            'harga'     => 'required|numeric',
-            'tgl_antar' => 'required|date',
-        ]);
+{
+    $request->validate([
+        'nm_cust'      => 'required',
+        'alamat'       => 'required',
+        'quantity'     => 'required|numeric',
+        'grade'        => 'required',
+        'harga'        => 'required|numeric',
+        'tgl_antar'    => 'required|date',
+        'keterangan'   => 'required',
+        'foto_lokasi'  => 'nullable|mimes:jpg,jpeg,png,pdf|max:5000',
+    ]);
 
-        // Hitung total harga
-        $total = $request->harga * $request->quantity;
+    $total = $request->harga * $request->quantity;
 
-        Pembelian::create([
-            'nm_cust'   => $request->nm_cust,
-            'alamat'    => $request->alamat,
-            'quantity'  => $request->quantity,
-            'grade'     => $request->grade,
-            'harga'     => $request->harga,
-            'tgl_antar' => $request->tgl_antar,
-            'status'    => 'Pending',
-        ]);
+    $fotoLokasi = null;
 
-        return redirect()->route('pembelian.index')
-            ->with('success', 'Pemesanan Berhasil');
+    if ($request->hasFile('foto_lokasi')) {
+        $file = $request->file('foto_lokasi');
+        $fotoLokasi = time().'_'.$file->getClientOriginalName();
+        $file->move(public_path('uploads/lokasi'), $fotoLokasi);
     }
+
+    Pembelian::create([
+        'nm_cust'     => $request->nm_cust,
+        'alamat'      => $request->alamat,
+        'quantity'    => $request->quantity,
+        'grade'       => $request->grade,
+        'harga'       => $request->harga,
+        'total_harga' => $total,
+        'tgl_antar'   => $request->tgl_antar,
+        'status'      => 'Pending',
+        'keterangan'  => $request->keterangan,
+        'foto_lokasi' => $fotoLokasi, // 🔥 INI YANG BENAR
+    ]);
+
+    return redirect()->route('pembelian.index')
+        ->with('success', 'Pemesanan Berhasil');
+}
+
 
     /**
      * Display the specified resource.
@@ -150,27 +163,31 @@ class PembelianController extends Controller
 
 
     public function konfirmasi(Request $request, $id)
-    {
-        $pembelian = Pembelian::findOrFail($id);
+{
+    $pembelian = Pembelian::findOrFail($id);
 
-        // validasi upload
-        $request->validate([
-            'bukti_pembayaran' => 'required|mimes:jpg,jpeg,png,pdf|max:5000',
-        ]);
+    $request->validate([
+        'bukti_pembayaran' => 'required|mimes:jpg,jpeg,png,pdf|max:5000',
+    ]);
 
-        // simpan bukti pembayaran
-        if ($request->hasFile('bukti_pembayaran')) {
-            $fileName = time() . '_' . $request->file('bukti_pembayaran')->getClientOriginalName();
-            $request->file('bukti_pembayaran')->move(public_path('uploads/bukti'), $fileName);
-            $pembelian->bukti_pembayaran = $fileName;
-        }
+    if ($request->hasFile('bukti_pembayaran')) {
+        $fileName = time().'_'.$request->file('bukti_pembayaran')->getClientOriginalName();
+        $request->file('bukti_pembayaran')->move(
+            public_path('uploads/bukti'),
+            $fileName
+        );
 
-        // UBAH STATUS DI SINI
-        $pembelian->status = 'Processing';
-        $pembelian->save();
-
-        return redirect()->route('pembelian.index')->with('success', 'Pembayaran sedang diproses');
+        // 🔥 INI WAJIB
+        $pembelian->bukti_pembayaran = $fileName;
     }
+
+    $pembelian->status = 'Processing';
+    $pembelian->save();
+
+    return redirect()->route('pembelian.index')
+        ->with('success', 'Pembayaran sedang diproses');
+}
+
 
 
     public function batal(Pembelian $pembelian)
@@ -188,20 +205,34 @@ class PembelianController extends Controller
     }
 
     public function approve($id)
-    {
-        $p = Pembelian::findOrFail($id);
-        $p->status = 'Paid';
-        $p->save();
+{
+    $pembelian = Pembelian::findOrFail($id);
 
-        return back()->with('success', 'Pembayaran disetujui.');
-    }
+    $pembelian->status = 'Paid'; // 🔑 INI KUNCINYA
+    $pembelian->save();
 
-    public function reject($id)
-    {
-        $p = Pembelian::findOrFail($id);
-        $p->status = 'Invalid';
-        $p->save();
+    return back()->with('success', 'Pembayaran disetujui');
+}
 
-        return back()->with('error', 'Pembayaran ditolak.');
-    }
+  public function alasan($id)
+{
+    $pembelian = Pembelian::findOrFail($id);
+    return view('pembelian.alasan', compact('pembelian'));
+}
+
+public function reject(Request $request, $id)
+{
+    $request->validate([
+        'alasan_penolakan' => 'required|string'
+    ]);
+
+    $pembelian = Pembelian::findOrFail($id);
+    $pembelian->status = 'Cancelled';
+    $pembelian->alasan_penolakan = $request->alasan_penolakan;
+    $pembelian->save();
+
+    return redirect()->route('pembelian.index')
+        ->with('success', 'Pesanan berhasil ditolak');
+}
+    
 }

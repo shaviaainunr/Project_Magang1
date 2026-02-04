@@ -18,7 +18,7 @@
                             <th>Material Pict</th>
                             <th>Grade</th>
                             <th>Material</th>
-                            <th>Harga</th>
+                            <th>Harga (Rp)</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -28,7 +28,7 @@
                             <th>Material Pict</th>
                             <th>Grade</th>
                             <th>Material</th>
-                            <th>Harga</th>
+                            <th>Harga (Rp)</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -39,9 +39,21 @@
                                 <td><img src="{{ url('/Foto_Material/' . $barang->gambar) }}" width="50px"></td>
                                 <td>{{ $barang->grade }}</td>
                                 <td>{{ $barang->material }}</td>
-                                <td>{{ $barang->harga }}</td>
+                                <td>Rp {{ number_format($barang->harga, 0, ',', '.') }}</td>
                                 <td>
-                                    <a href="{{ route('pembelian.create') }}" class="btn btn-success">Pembelian</a>
+                                    {{-- ADMIN --}}
+                                    @if (Auth::user()->role === 'admin')
+                                        <a href="{{ route('admin.barang.edit', $barang->id) }}" class="btn btn-success btn-sm">
+                                            Edit <i class="fas fa-edit ml-1"></i>
+                                        </a>
+                                    @endif
+
+                                    {{-- USER --}}
+                                    @if (Auth::user()->role === 'user')
+                                        <a href="{{ route('pembelian.create') }}" class="btn btn-primary btn-sm">
+                                        Pembelian <i class="fas fa-shopping-cart ml-1"></i>
+                                        </a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

@@ -43,7 +43,7 @@
           <!-- Upload Bukti Pembayaran -->
           <div class="form-group text-left">
               <label><strong>Upload Bukti Pembayaran (JPG/PNG/PDF)</strong></label>
-              <input type="file" name="bukti_pembayaran" id="buktiPembayaran" class="form-control" accept="img/*,.pdf" required>
+              <input type="file" name="bukti_pembayaran" id="buktiPembayaran" class="form-control" accept="image/*,.pdf" required>
               <small class="text-muted">Silakan upload bukti transfer atau scan QRIS.</small>
           </div>
 

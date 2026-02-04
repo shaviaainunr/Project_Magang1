@@ -15,8 +15,9 @@
         <p><strong>Alamat:</strong> {{ $pembelian->alamat }}</p>
         <p><strong>Quantity:</strong> {{ $pembelian->quantity }}</p>
         <p><strong>Grade:</strong> {{ $pembelian->grade }}</p>
-        <p><strong>Total Harga:</strong> Rp {{ number_format($pembelian->harga,0,',','.') }}</p>
+        <p><strong>Total Harga:</strong> Rp {{ number_format($pembelian->total_harga,0,',','.') }}</p>
         <p><strong>Tanggal Antar:</strong> {{ $pembelian->tgl_antar }}</p>
+        <p><strong>Keterangan Proyek:</strong> {{ $pembelian->keterangan }}</p>
 
         <hr>
 
@@ -35,10 +36,18 @@
         <h3 id="countdown" style="font-weight:bold;"></h3>
         <p>Jika waktu habis, pesanan otomatis dibatalkan.</p>
 
-        <!-- Tombol setelah bayar -->
-        <form method="POST" action="{{ route('pembelian.konfirmasi', $pembelian->id) }}">
+        <!-- Tombol setelah bayar + Upload Bukti -->
+        <form method="POST" action="{{ route('pembelian.konfirmasi', $pembelian->id) }}" enctype="multipart/form-data" id="paymentForm">
           @csrf
-          <button type="submit" class="btn btn-success mt-3">Saya Sudah Bayar</button>
+
+          <!-- Upload Bukti Pembayaran -->
+          <div class="form-group text-left">
+              <label><strong>Upload Bukti Pembayaran (JPG/PNG/PDF)</strong></label>
+              <input type="file" name="bukti_pembayaran" id="buktiPembayaran" class="form-control" accept="img/*,.pdf" required>
+              <small class="text-muted">Silakan upload bukti transfer atau scan QRIS.</small>
+          </div>
+
+          <button type="submit" class="btn btn-success mt-3" id="bayarButton" disabled>Saya Sudah Bayar</button>
         </form>
 
       </div>
@@ -69,5 +78,13 @@
     }
   }, 1000);
 </script>
+<script>
+  // Aktifkan tombol jika sudah upload bukti
+  document.getElementById('buktiPembayaran').addEventListener('change', function() {
+      const bayarButton = document.getElementById('bayarButton');
+      bayarButton.disabled = this.files.length === 0;
+  });
+</script>
+
 
 @endsection
